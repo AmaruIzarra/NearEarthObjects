@@ -9,7 +9,7 @@ A machine learning project classifying Near-Earth Asteroids as potentially hazar
 
 ## The Problem
 
-NASA flags asteroids as Potentially Hazardous based on two thresholds: a Minimum Orbit Intersection Distance under 0.05 AU and an absolute magnitude brighter than 22. Neither value is directly in the dataset. Rather than treating this as a dead end, the project frames the model as a triage tool — one that learns which observable properties most strongly correlate with a hazardous designation, not one that claims to reproduce NASA's exact formula.
+NASA flags asteroids as Potentially Hazardous based on two thresholds: a Minimum Orbit Intersection Distance under 0.05 AU and an absolute magnitude brighter than 22. Neither value is directly in the dataset. Rather than treating this as a dead end, the project frames the model as a triage tool; one that learns which observable properties most strongly correlate with a hazardous designation, not one that claims to reproduce NASA's exact formula.
 
 The dataset is also heavily imbalanced: 87.2% non-hazardous vs 12.8% hazardous. A model that always predicts "non-hazardous" gets 87.4% accuracy, which is useless in a safety context. Every modelling decision in this project accounts for that.
 
@@ -17,7 +17,7 @@ The dataset is also heavily imbalanced: 87.2% non-hazardous vs 12.8% hazardous. 
 
 ## Features
 
-The raw dataset had 9 columns. After cleaning, `estimated_diameter_min` and `estimated_diameter_max` were consolidated into a single mean — they had a perfect 1.00 correlation, so keeping both was redundant. Three physics-motivated features were then engineered:
+The raw dataset had 9 columns. After cleaning, `estimated_diameter_min` and `estimated_diameter_max` were consolidated into a single mean, since they had a perfect 1.00 correlation keeping both was redundant. Three physics-motivated features were then engineered:
 
 | Feature | Description |
 |---|---|
@@ -46,6 +46,8 @@ The raw dataset had 9 columns. After cleaning, `estimated_diameter_min` and `est
 
 ROC-AUC: Random Forest 0.942, XGBoost 0.915, LightGBM 0.906, RBF SVM 0.863
 
+<img width="1526" height="560" alt="image" src="https://github.com/user-attachments/assets/d1725fea-a9ab-4929-bcea-c1c50a7c1d79" />
+
 Models trained without class balancing (Logistic Regression, AdaBoost, XGBoost) completely failed to learn the minority class despite looking accurate, which is exactly why accuracy is a misleading metric when classes are imbalanced.
 
 Random Forest had the best overall balance, with the highest macro F1 and AUC-ROC. LightGBM had the highest hazardous-class recall (0.98), making it the best fit for a triage scenario where missing a real threat is the worst possible outcome. The SVM variants maximized sensitivity at the cost of precision, which could still be useful when there is capacity to filter false alarms downstream.
@@ -58,6 +60,8 @@ Absolute magnitude was the strongest individual predictor in both Random Forest 
 
 Miss distance was consistently the weakest predictor across every stage of the analysis, correlation, boxplots, PCA loadings, and feature importance. How close an asteroid passes on a single observation tells you very little about whether it is classified as hazardous over its full orbital lifetime.
 
+<img width="1085" height="536" alt="image" src="https://github.com/user-attachments/assets/9bbe2705-cbad-4dcc-9ddc-600786995d8e" />
+
 The engineered kinetic energy feature ranked among the top predictors in both models, which validated the approach of incorporating physics intuition into feature design.
 
 PCA on the full feature set captured 78.6% of variance in two components (PC1: 54.4%, PC2: 24.2%), with PC1 representing size and PC2 capturing orbital dynamics. The 2D projection showed meaningful but partial class separation, confirming that the models have something real to learn from, but also that perfect classification is not achievable without MOID.
@@ -65,6 +69,8 @@ PCA on the full feature set captured 78.6% of variance in two components (PC1: 5
 ---
 
 ## Risk Score
+
+<img width="1526" height="558" alt="image" src="https://github.com/user-attachments/assets/8f0dfcf3-07fb-4e33-a6c4-159c60c1741e" />
 
 On top of LightGBM's output probabilities, a composite 0 to 100 risk score was built by combining hazard probability (60%) with normalized asteroid diameter (40%). The score produces strong class separation overall, but the top-ranked asteroids revealed a limitation: very large non-hazardous asteroids can receive inflated scores because their diameter overrides the probability signal. Future work should explore nonlinear severity weighting to fix this.
 
