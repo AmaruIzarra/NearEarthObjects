@@ -93,9 +93,9 @@ The dataset downloads automatically via kagglehub on first run.
 
 | Name | Contribution |
 |---|---|
-| Amaru Izarra-Jacome | Data cleaning, EDA, PCA, feature engineering, model comparison, visualizations |
+| Amaru Izarra-Jacome | Data cleaning, EDA, PCA, feature engineering, model comparison, visualizations, Risk Score |
 | Nikhilkumar Patel | Feature engineering, Logistic Regression |
-| Silvio Silva Junior | Dummy baseline classifier |
-| Hugo Velasco | Random Forest, XGBoost, AdaBoost, SVM |
+| Silvio Silva Junior | Dummy baseline classifier, XGBoost, AdaBoost |
+| Hugo Velasco | SVM |
 | Aten Cheung | LightGBM |
-| Robert Allan Bolista | Risk score |
+| Robert Allan Bolista | Random Forest |
