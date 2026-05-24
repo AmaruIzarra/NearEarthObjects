@@ -3,7 +3,7 @@
 A machine learning project classifying Near-Earth Asteroids as potentially hazardous, using 338,199 observations from NASA close-approach records spanning 1910 to 2024.
 
 **Dataset:** [NASA Nearest Earth Objects (1910-2024)](https://www.kaggle.com/datasets/ivansher/nasa-nearest-earth-objects-1910-2024) (Kaggle)  
-**Course:** Machine Learning, WATSpeed — University of Waterloo
+**Course:** Machine Learning, WATSpeed (University of Waterloo)
 
 ---
 
